@@ -14,8 +14,14 @@ docker-compose up -d
 
 ### Starting spring project
 
+Using gradle:
 ```bash
 ./gradlew bootRun
+```
+
+Or if you prefer maven:
+```bash
+ ./mvnw spring-boot:run
 ```
 
 ## Further reading
