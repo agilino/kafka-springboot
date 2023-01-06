@@ -1,6 +1,0 @@
-server:
-  port: 8080
-spring:
-  kafka:
-    bootstrap-servers: kafka.agilino.app:29092
-    topic-name: change-me2
