@@ -1,0 +1,51 @@
+version: "3"
+services:
+  nginx-workshop:
+    image: nginx:latest
+    hostname: nginx
+    container_name: nginx
+    depends_on:
+      - kafka-workshop
+    volumes:
+      - ./kafka_nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 29092-29094:29092-29094
+    environment:
+      # to automatically obtain a letsencrypt certificate have acme-companion running in "nginx-proxy" network
+      # refer to https://github.com/nginx-proxy/acme-companion/blob/main/docs/Docker-Compose.md#two-containers-example
+      - "VIRTUAL_HOST=kafka.agilino.app"
+      - "VIRTUAL_NETWORK=nginx-proxy"
+      - "VIRTUAL_PORT=80"
+      - "LETSENCRYPT_HOST=kafka.agilino.app"
+      - "LETSENCRYPT_EMAIL=agilno.app@gmail.com"
+    networks:
+      - agilino-network
+      - nginx-proxy
+
+  zookeeper-workshop:
+    image: confluentinc/cp-zookeeper:7.3.1
+    container_name: zookeeper-workshop
+    environment:
+      - "ZOOKEEPER_CLIENT_PORT=2181"
+      - "ZOOKEEPER_TICK_TIME=2000"
+    networks:
+      - agilino-network
+
+  kafka-workshop:
+    image: confluentinc/cp-kafka:7.3.1
+    container_name: kafka-workshop
+    depends_on:
+      - zookeeper-workshop
+    environment:
+      - "KAFKA_BROKER_ID=1"
+      - "KAFKA_ZOOKEEPER_CONNECT=zookeeper-workshop:2181"
+      - "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-workshop:9092,PLAINTEXT_HOST://kafka.agilino.app:29092"
+      - "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      - "KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT"
+      - "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1"
+    networks:
+      - agilino-network
+
+networks:
+  agilino-network:
+  nginx-proxy:

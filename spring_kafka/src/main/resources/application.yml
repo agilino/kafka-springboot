@@ -1,0 +1,7 @@
+server:
+  port: 8080
+spring:
+  kafka:
+    # you need to configure kafka server with port and a topic here
+    bootstrap-servers: change-this-hostname.com:29092
+    topic-name: change-me2
