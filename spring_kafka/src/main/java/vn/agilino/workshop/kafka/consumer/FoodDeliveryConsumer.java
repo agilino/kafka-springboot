@@ -18,7 +18,7 @@ import vn.agilino.workshop.kafka.producer.FoodDeliveryProducer;
 public class FoodDeliveryConsumer {
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(FoodDeliveryProducer.class);
-    private static final Set<String> ALLOWED_FOODS = Set.of("Bun Bo", "Pho Ga", "Bun Rieu Cau");
+    private static final Set<String> ALLOWED_FOODS = Set.of("Bun Bo", "Pho Ga", "Bun Rieu Cua");
 
     final Map<Integer, FoodOrderDTO> orders = new ConcurrentHashMap<>();
 
